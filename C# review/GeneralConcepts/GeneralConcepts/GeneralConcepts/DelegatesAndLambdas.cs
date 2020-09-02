@@ -20,7 +20,7 @@ namespace GeneralConcepts.DelegatesAndLambdas
              var info = func(qa, "Tony", 23);
 
             ////Lambda expresion
-            //(input - parameters) => expression
+            //(input - parameters) =>  expression 
 
             Action<Employee, string, int> lambdaAction = (employee, name, age) => {
                 employee.Name = name;
@@ -54,7 +54,6 @@ namespace GeneralConcepts.DelegatesAndLambdas
             employee.Name = name;
             employee.Age = age;
         }
-
     }
 
     

@@ -15,7 +15,6 @@ namespace GeneralConcepts
             //Linq demo
             GeneralConcepts.Linq.Tester.Test();
 
-
         }
     }
 }

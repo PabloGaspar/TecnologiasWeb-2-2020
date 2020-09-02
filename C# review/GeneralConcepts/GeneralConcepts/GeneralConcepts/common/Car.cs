@@ -7,7 +7,14 @@ namespace GeneralConcepts
     public enum CarType
     {
         Ferrary,
-        Beetle
+        Beetle 
+    }
+
+    public enum ColorTypes
+    {
+        White,
+        Red,
+        Black
     }
 
     public class Car

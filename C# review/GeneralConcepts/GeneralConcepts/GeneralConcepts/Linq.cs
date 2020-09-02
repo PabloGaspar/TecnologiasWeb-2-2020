@@ -49,35 +49,40 @@ namespace GeneralConcepts.Linq
             
 
             //Filtering 
-            var lessThan30 = devsToWork.Where(e => e.Age < 30); //&& e.something == 2
-            var containsA = devsToWork.Where(e => e.Name.Contains("a"));
+            var lessThan30 = devsToWork.Where((e) => { return e.Age < 30; }); //&& e.something == 2
+            var containsA = devsToWork.Where(e => e.Name.ToLower().StartsWith("a"));
 
-            var lessThan30_2 = from element in devsToWork
-                             where element.Age < 30
-                             select element;
+            
 
             //First
             var firstNameD = devsToWork.FirstOrDefault(e => e.Name.StartsWith("D"))?? new Developer();
             var firstNameW = devsToWork.FirstOrDefault(e => e.Name.StartsWith("W")) ?? new Developer();
             var firstNameD2 = devsToWork.Single(e => e.Id == 2);
             //Ordering
-            var orderedlistByIdAsc = devsToWork.OrderBy(e => e.Id).ThenByDescending(e => e.Name);
+            var orderedlistByIdAsc = devsToWork.OrderBy((e) => { return e.Id; }).ThenByDescending(e => e.Name);
 
             var orderedlistByIdAsc_2 = from element in devsToWork
-                                       orderby element.Name, element.Name descending
-                                       select element;
+                                       orderby element.Name descending
+                                       where element.Age > 22
+                                       select element.Name;
 
             //Projection Selecting 
             var carProjection = devsToWork
                 .Where(e => e.Name.StartsWith("D"))
-                .Select(e =>
-                    new Car()
+                .Select(e => {
+                    return new Car()
                     {
                         OwnerName = e.Name,
                         OwnerAge = e.Age,
                         type = e.Age < 30 ? CarType.Ferrary : CarType.Beetle
-                    }
-                );
+                    };
+                });
+
+            var listNames = new List<string>() { "Maria", "pepe", "pedro", "sebastian" };
+
+            var size = listNames.Count;
+            var nameLenght = listNames.Select(e => {return  e.Length;});
+
 
             var carProjectionSame = devsToWork
                 .Where(e => e.Name.StartsWith("D"))
@@ -93,6 +98,10 @@ namespace GeneralConcepts.Linq
                         type = e.Age < 30 ? CarType.Ferrary : CarType.Beetle
                     };
                 });
+
+            var lessThan30_2 = from element in devsToWork
+                               where element.Age < 30
+                               select element;
 
             var carProjectionQuery = from element in devsToWork
                                      where element.Name.StartsWith("D")

@@ -34,7 +34,7 @@ namespace Interfaces
             }
             else
             {
-                interestFactor = 0.5m;
+                interestFactor = 0.05m;
             }
 
             return amount * interestFactor;

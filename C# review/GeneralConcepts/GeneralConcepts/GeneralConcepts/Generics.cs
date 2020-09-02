@@ -42,8 +42,13 @@ namespace GeneralConcepts.Generics
     {
         public static void Test()
         {
+            var car2 = new Car() 
+            {
+                OwnerAge = 34,
+                type = CarType.Ferrary
+            };
 
-            var car = new Car() {OwnerName = "autito",OwnerAge = 11 };
+            Car car = new Car() {OwnerName = "autito",OwnerAge = 11 };
 
             car.SayHi();
 
@@ -94,7 +99,7 @@ namespace GeneralConcepts.Generics
             int b = 2;
 
             Swap<int>(ref a, ref b);
-            System.Console.WriteLine(a + " " + b);
+            System.Console.WriteLine($"{a} - {b}");
 
             //inference 
             Swap(ref a, ref b);

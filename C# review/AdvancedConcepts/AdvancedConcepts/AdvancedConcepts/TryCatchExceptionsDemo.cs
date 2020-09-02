@@ -12,6 +12,7 @@ namespace AdvancedConcepts
             try
             {
                 SomeMethod();
+                //mas codigo
             }
             catch(MyException ex)
             {

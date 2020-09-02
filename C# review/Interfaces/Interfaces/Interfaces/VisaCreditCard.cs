@@ -25,7 +25,7 @@ namespace Interfaces
 
         public decimal calculateInterest(decimal amount)
         {
-            return amount * 0.5m;
+            return amount * 0.05m + 10m;
         }
 
         public string GetBrand()

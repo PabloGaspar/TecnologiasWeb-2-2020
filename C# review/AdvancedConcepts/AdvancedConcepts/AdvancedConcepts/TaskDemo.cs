@@ -76,23 +76,24 @@ namespace AdvancedConcepts
                 }
                 return ctr;
             }).GetAwaiter();
-            Console.WriteLine("Finished {0:N0} iterations.", taskWithResult2.GetResult());
+            Console.WriteLine("Finished {0:N0} iterations.", taskWithResult.Result);
         }
 
-        public static async Task TestChef()
+        public async static Task TestChef()
         {
             Console.Clear();
 
             var chef = new Chef();
 
-            var chickenAsync =   chef.PutChickenInTheOvenAsync();
-            //Console.WriteLine($"{chicken} : is ready");
+            var chickenTask = chef.PutChickenInTheOvenAsync();
+           // Console.WriteLine($"{chicken} : is ready");
 
             Thread.Sleep(1000);
 
             var salad = chef.PrepareSalad();
             Console.WriteLine($"{salad} : is ready");
-            var chicken = await chickenAsync;
+
+            var chicken = await chickenTask;
             Console.WriteLine($"{chicken} : is ready");
         }
 
@@ -118,12 +119,17 @@ namespace AdvancedConcepts
     {
         public async Task<string> PutChickenInTheOvenAsync()
         {
-            var t = Task.Run(()=> {
+           var prepareChiken = Task.Run(() => {
                 Console.WriteLine("putting the chicken in the oven");
-                Thread.Sleep(20000);
+                Thread.Sleep(25000);
                 Console.WriteLine("getting the chicken from the oven");
+
             });
-            await t;
+
+            await prepareChiken;
+
+            ///
+
             return "fried chicken";
         }
 
@@ -140,13 +146,14 @@ namespace AdvancedConcepts
     {
         public async Task<string> PutChickenInTheOvenAsync()
         {
-            await  Task.Run(() => 
+            await Task.Run(() =>
             {
                 Console.WriteLine("putting the chicken in the oven");
                 Thread.Sleep(20000);
                 Console.WriteLine("getting the chicken from the oven");
             });
 
+            
             return "fried chicken";
         }
 
