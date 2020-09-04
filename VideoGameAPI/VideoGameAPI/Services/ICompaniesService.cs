@@ -8,8 +8,11 @@ namespace VideoGameAPI.Services
 {
     public interface ICompaniesService
     {
-        IEnumerable<CompanyModel> GetCompanies();
-        CompanyModel GetCompany(int  companyID);
+        IEnumerable<CompanyModel> GetCompanies(string orderBy);
+        CompanyModel GetCompany(int companyId);
+        CompanyModel CreateCompany(CompanyModel companyModel);
+        DeleteModel DeleteCompany(int companyId);
+
     }
 }
 
