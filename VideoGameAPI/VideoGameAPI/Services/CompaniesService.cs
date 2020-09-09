@@ -43,11 +43,8 @@ namespace VideoGameAPI.Services
 
         public DeleteModel DeleteCompany(int companyId)
         {
-            var companyToDelete = companies.FirstOrDefault(c => c.Id == companyId);
-            if (companyToDelete == null)
-            {
-                throw new BadRequestOperationException($"The company with id:{companyId} does not exists");
-            }
+            var companyToDelete = GetCompany(companyId);
+
             var result = companies.Remove(companyToDelete);
             return new DeleteModel()
             {
@@ -80,7 +77,23 @@ namespace VideoGameAPI.Services
 
         public CompanyModel GetCompany(int companyID)
         {
-            return companies.FirstOrDefault(c => c.Id == companyID);
+            var company = companies.FirstOrDefault(c => c.Id == companyID);
+            if (company == null)
+            {
+                throw new NotFoundOperationException($"The company with id:{companyID} does not exists");
+            }
+            return company;
+        }
+
+        public CompanyModel UpdateCompany(int companyId, CompanyModel companyModel)
+        {
+            var companyToUpdate = GetCompany(companyId);
+            companyToUpdate.CEO = companyModel.CEO ?? companyToUpdate.CEO;
+            companyToUpdate.Country = companyModel.Country ?? companyToUpdate.Country;
+            companyToUpdate.FundationDate = companyModel.FundationDate ?? companyToUpdate.FundationDate;
+            companyToUpdate.Name = companyModel.Name ?? companyToUpdate.Name;
+
+            return companyToUpdate;
         }
     }
 }

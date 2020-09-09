@@ -12,7 +12,7 @@ namespace VideoGameAPI.Services
         CompanyModel GetCompany(int companyId);
         CompanyModel CreateCompany(CompanyModel companyModel);
         DeleteModel DeleteCompany(int companyId);
-
+        CompanyModel UpdateCompany(int companyId, CompanyModel companyModel);
     }
 }
 

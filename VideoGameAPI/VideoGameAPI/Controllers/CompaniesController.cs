@@ -39,12 +39,16 @@ namespace VideoGameAPI.Controllers
         }
 
         //api/companies/companiId
-        [HttpGet("{companyId:int}")]
+        [HttpGet("{companyId:int}", Name = "GetCompany")]
         public ActionResult<CompanyModel> GetCompany(int companyId)
         {
             try
             {
                 return _companyService.GetCompany(companyId);
+            }
+            catch (NotFoundOperationException ex)
+            {
+                return NotFound(ex.Message); ;
             }
             catch (Exception ex)
             {
@@ -53,13 +57,18 @@ namespace VideoGameAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<CompanyModel> CreateCompanu([FromBody] CompanyModel companyModel)
+        public ActionResult<CompanyModel> CreateCompany([FromBody] CompanyModel companyModel)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }   
+                
                 var url = HttpContext.Request.Host;
                 var newCompany = _companyService.CreateCompany(companyModel);
-                return Created($"{url}/api/companies/{newCompany.Id}", newCompany);
+                return CreatedAtRoute("GetCompany", new { companyId = newCompany.Id }, newCompany);
             }
             catch (Exception ex)
             {
@@ -74,17 +83,44 @@ namespace VideoGameAPI.Controllers
             {
                 return Ok(_companyService.DeleteCompany(companyId));
             }
-            catch (BadRequestOperationException ex)
+            catch (NotFoundOperationException ex)
             {
-                return BadRequest(new DeleteModel() { 
-                    IsSuccess = false,
-                    Message = ex.Message
-                });;
+                return NotFound(ex.Message);;
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Something happend: {ex.Message}");
             }
         }
+
+        [HttpPut("{companyId:int}")]
+        public IActionResult UpdateCompany(int companyId, [FromBody] CompanyModel companyModel)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    foreach (var pair in ModelState)
+                    {
+                        if (pair.Key == nameof(companyModel.Country) && pair.Value.Errors.Count > 0)
+                        {
+                            return BadRequest(pair.Value.Errors);
+                        }
+                    }
+                }
+
+                return Ok(_companyService.UpdateCompany(companyId, companyModel));
+            }
+            catch (NotFoundOperationException ex)
+            {
+                return NotFound(ex.Message); ;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Something happend: {ex.Message}");
+            }
+        }
+
+
     }
 }
