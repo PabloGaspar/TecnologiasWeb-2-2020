@@ -9,7 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using VideoGameAPI.Data.Repository;
 using VideoGameAPI.Services;
+using AutoMapper;
 
 namespace VideoGameAPI
 {
@@ -27,7 +29,11 @@ namespace VideoGameAPI
         {
             services.AddControllers();
 
-            services.AddSingleton<ICompaniesService, CompaniesService>();
+            services.AddTransient<ICompaniesService, CompaniesService>();
+            services.AddSingleton<ILibraryRepository, LibraryRepository>();
+
+            //automapper configuration
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,7 +1,10 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VideoGameAPI.Data.Entities;
+using VideoGameAPI.Data.Repository;
 using VideoGameAPI.Exceptions;
 using VideoGameAPI.Models;
 
@@ -9,11 +12,8 @@ namespace VideoGameAPI.Services
 {
     public class CompaniesService : ICompaniesService
     {
-        private List<CompanyModel> companies = new List<CompanyModel>
-        {
-            new CompanyModel(){ Id = 1, Name = "FromSoftware", Country ="japan", FundationDate = new DateTime(1993,12,12), CEO = "Miyazaki"},
-            new CompanyModel(){ Id = 2, Name = "Blizzard", Country ="US", FundationDate = new DateTime(1993,12,12), CEO = "None"}
-        };
+        ILibraryRepository _libraryRepository;
+        private IMapper _mapper;
 
         private HashSet<string> allowedOrderByParameters = new HashSet<string>()
         {
@@ -23,34 +23,42 @@ namespace VideoGameAPI.Services
             "country"
         };
 
+        public CompaniesService(ILibraryRepository libraryRepository, IMapper mapper)
+        {
+            _libraryRepository = libraryRepository;
+            _mapper = mapper;
+        }
+
         public CompanyModel CreateCompany(CompanyModel companyModel)
         {
-            int newId;
-            if (companies.Count == 0)
-            {
-                newId = 1;
-            }
-            else
-            {
-                newId = companies.OrderByDescending(c => c.Id).FirstOrDefault().Id + 1;
-            }
 
-            companyModel.Id = newId;
-
-            companies.Add(companyModel);
-            return companyModel;
+            var companyEntity = _mapper.Map<CompanyEntity>(companyModel);
+            var returnetCompany = _libraryRepository.CreateCompany(companyEntity);
+            return _mapper.Map<CompanyModel>(returnetCompany);
         }
 
         public DeleteModel DeleteCompany(int companyId)
         {
             var companyToDelete = GetCompany(companyId);
 
-            var result = companies.Remove(companyToDelete);
-            return new DeleteModel()
+            var result = _libraryRepository.DeleteCompany(companyId);
+
+            if (result)
             {
-                IsSuccess = true,
-                Message = "The company was deleted."
-            };
+                return new DeleteModel()
+                {
+                    IsSuccess = result,
+                    Message = "The company was deleted."
+                };
+            } else
+            {
+                return new DeleteModel()
+                {
+                    IsSuccess = result,
+                    Message = "The company was not deleted."
+                };
+            }
+           
         }
 
         public IEnumerable<CompanyModel> GetCompanies(string orderBy)
@@ -60,40 +68,27 @@ namespace VideoGameAPI.Services
                 throw new BadRequestOperationException($"the field: {orderBy} is not supported, please use one of these {string.Join(",", allowedOrderByParameters)}");
             }
 
-            switch (orderBy)
-            {
-                case "id":
-                    return companies.OrderBy(c => c.Id);
-                case "name":
-                    return companies.OrderBy(c => c.Name);
-                case "fundation-date":
-                    return companies.OrderBy(c => c.FundationDate);
-                case "country":
-                    return companies.OrderBy(c => c.Country);
-                default:
-                    return companies.OrderBy(c => c.Id); ;
-            }
+            var entityList = _libraryRepository.GetCompanies(orderBy);
+            var modelList = _mapper.Map<IEnumerable<CompanyModel>>(entityList);
+            return modelList;
         }
 
         public CompanyModel GetCompany(int companyID)
         {
-            var company = companies.FirstOrDefault(c => c.Id == companyID);
+            var company = _libraryRepository.GetCompany(companyID);
             if (company == null)
             {
                 throw new NotFoundOperationException($"The company with id:{companyID} does not exists");
             }
-            return company;
+
+            return _mapper.Map<CompanyModel>(company);
         }
 
         public CompanyModel UpdateCompany(int companyId, CompanyModel companyModel)
         {
-            var companyToUpdate = GetCompany(companyId);
-            companyToUpdate.CEO = companyModel.CEO ?? companyToUpdate.CEO;
-            companyToUpdate.Country = companyModel.Country ?? companyToUpdate.Country;
-            companyToUpdate.FundationDate = companyModel.FundationDate ?? companyToUpdate.FundationDate;
-            companyToUpdate.Name = companyModel.Name ?? companyToUpdate.Name;
-
-            return companyToUpdate;
+            var companyEntity = _mapper.Map<CompanyEntity>(companyModel);
+            _libraryRepository.UpdateCompany(companyEntity);
+            return companyModel;
         }
     }
 }
