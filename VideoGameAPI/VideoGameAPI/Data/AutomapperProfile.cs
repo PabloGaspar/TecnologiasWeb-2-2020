@@ -16,7 +16,8 @@ namespace VideoGameAPI.Data
                 .ReverseMap();
 
 
-
+            this.CreateMap<VideogameModel, VideoGameEntity>()
+                .ReverseMap();
             //this.CreateMap<Camp, CampModel>()
             //  .ForMember(c => c.Venue, o => o.MapFrom(m => m.Location.VenueName))
             //  .ReverseMap();

@@ -30,6 +30,7 @@ namespace VideoGameAPI
             services.AddControllers();
 
             services.AddTransient<ICompaniesService, CompaniesService>();
+            services.AddTransient<IVidegamesService, VidegamesService>();
             services.AddSingleton<ILibraryRepository, LibraryRepository>();
 
             //automapper configuration

@@ -14,6 +14,16 @@ namespace VideoGameAPI.Data.Repository
             new CompanyEntity(){ Id = 2, Name = "Blizzard", Country ="US", FundationDate = new DateTime(1993,12,12), CEO = "None"}
         };
 
+
+        private List<VideoGameEntity> videogames = new List<VideoGameEntity>
+        {
+            new VideoGameEntity(){ Id = 1, Name = "Dark Souls", ESRB = "M", Genre = "Action RPG", Price = 44.9m, ReleaseDate = new DateTime(2008, 10,12), companyId = 1 },
+            new VideoGameEntity(){ Id = 2, Name = "Bloodborne", ESRB = "M", Genre = "Action RPG", Price = 54.9m, ReleaseDate = new DateTime(2014, 12,10), companyId = 1  },
+            new VideoGameEntity(){ Id = 3, Name = "Warcraft 3", ESRB = "T", Genre = "Strategy", Price = 15.9m, ReleaseDate = new DateTime(2001, 12,10), companyId = 2 },
+            new VideoGameEntity(){ Id = 4, Name = "starcraft remaster", ESRB = "T", Genre = "Strategy", Price = 10.9m, ReleaseDate = new DateTime(1993,12,10), companyId = 2 },
+        };
+
+        // companies
         public CompanyEntity CreateCompany(CompanyEntity company)
         {
             int newId;
@@ -70,5 +80,52 @@ namespace VideoGameAPI.Data.Repository
             companyToUpdate.Name = companyModel.Name ?? companyToUpdate.Name;
             return true;
         }
+
+
+        public VideoGameEntity CreateVideogame(VideoGameEntity videoGame)
+        {
+            int newId;
+            var lastVideogame = videogames.OrderByDescending(v => v.Id).FirstOrDefault();
+            if (lastVideogame == null)
+            {
+                newId = 1;
+            }
+            else
+            {
+                newId = lastVideogame.Id + 1;
+            }
+            videoGame.Id = newId;
+            videogames.Add(videoGame);
+            return videoGame;
+        }
+
+        public VideoGameEntity GetVideogame(int videogameId)
+        {
+            return videogames.FirstOrDefault(v => v.Id == videogameId);
+        }
+
+        public IEnumerable<VideoGameEntity> GetVideoGames(int companyId)
+        {
+            return videogames.Where(v => v.companyId == companyId);
+        }
+
+        public bool UpdateVideogame(VideoGameEntity videoGame)
+        {
+            var videogameToUpdate = GetVideogame(videoGame.Id);
+            videogameToUpdate.Name = videoGame.Name ?? videogameToUpdate.Name;
+            videogameToUpdate.Price = videoGame.Price?? videogameToUpdate.Price;
+            videogameToUpdate.ReleaseDate = videoGame.ReleaseDate ?? videogameToUpdate.ReleaseDate;
+            videogameToUpdate.Genre = videoGame.Genre ?? videogameToUpdate.Genre;
+            videogameToUpdate.ESRB = videoGame.ESRB ?? videogameToUpdate.ESRB;
+            return true;
+        }
+
+        public bool DeleteVideogame(int videogameId)
+        {
+            var videogameToDelete = videogames.SingleOrDefault(v => v.Id == videogameId);
+            videogames.Remove(videogameToDelete);
+            return true;
+        }
+        
     }
 }

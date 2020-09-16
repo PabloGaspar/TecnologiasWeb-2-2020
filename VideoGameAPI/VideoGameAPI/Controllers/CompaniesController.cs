@@ -11,7 +11,7 @@ using VideoGameAPI.Services;
 namespace VideoGameAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class CompaniesController : Controller
+    public class CompaniesController : ControllerBase
     {
 
         private ICompaniesService _companyService;

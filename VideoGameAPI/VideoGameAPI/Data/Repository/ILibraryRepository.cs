@@ -14,5 +14,12 @@ namespace VideoGameAPI.Data.Repository
         CompanyEntity CreateCompany(CompanyEntity companyModel);
         bool DeleteCompany(int companyId);
         bool UpdateCompany(CompanyEntity companyModel);
+
+        //videogames 
+        VideoGameEntity CreateVideogame(VideoGameEntity videoGame);
+        VideoGameEntity GetVideogame(int videogameId);
+        IEnumerable<VideoGameEntity> GetVideoGames(int companyId);
+        bool UpdateVideogame(VideoGameEntity videoGame);
+        bool DeleteVideogame(int videogameId);
     }
 }

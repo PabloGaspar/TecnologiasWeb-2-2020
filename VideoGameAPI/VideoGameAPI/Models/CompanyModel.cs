@@ -16,5 +16,7 @@ namespace VideoGameAPI.Models
         [DataType(DataType.Date)]
         public DateTime? FundationDate { get; set; }
         public string CEO { get; set; }
+
+        public IEnumerable<VideogameModel> Videogames { get; set; }
     }
 }
