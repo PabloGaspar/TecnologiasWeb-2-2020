@@ -23,10 +23,11 @@ namespace VideoGameAPI.Controllers
 
         //api/companies
         [HttpGet]
-        public ActionResult<IEnumerable<CompanyModel>> GetCompanies(string orderBy = "Id") {
+        public async  Task<ActionResult<IEnumerable<CompanyModel>>> GetCompaniesAsync(string orderBy = "Id", bool showVideogames = false) 
+        {
             try
             {
-                return Ok(_companyService.GetCompanies(orderBy));
+                return Ok(await _companyService.GetCompaniesAsync(orderBy, showVideogames));
             }
             catch (BadRequestOperationException ex)
             {
@@ -40,11 +41,11 @@ namespace VideoGameAPI.Controllers
 
         //api/companies/companiId
         [HttpGet("{companyId:int}", Name = "GetCompany")]
-        public ActionResult<CompanyModel> GetCompany(int companyId)
+        public async Task<ActionResult<CompanyModel>> GetCompanyAync(int companyId, bool showVideogames = false)
         {
             try
             {
-                return _companyService.GetCompany(companyId);
+                return await _companyService.GetCompanyAsync(companyId, showVideogames);
             }
             catch (NotFoundOperationException ex)
             {
@@ -57,7 +58,7 @@ namespace VideoGameAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<CompanyModel> CreateCompany([FromBody] CompanyModel companyModel)
+        public async Task<ActionResult<CompanyModel>> CreateCompanyAsync([FromBody] CompanyModel companyModel)
         {
             try
             {
@@ -67,7 +68,7 @@ namespace VideoGameAPI.Controllers
                 }   
                 
                 var url = HttpContext.Request.Host;
-                var newCompany = _companyService.CreateCompany(companyModel);
+                var newCompany = await _companyService.CreateCompanyAsync(companyModel);
                 return CreatedAtRoute("GetCompany", new { companyId = newCompany.Id }, newCompany);
             }
             catch (Exception ex)

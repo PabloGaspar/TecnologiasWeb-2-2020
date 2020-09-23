@@ -37,7 +37,12 @@ namespace VideoGameAPI.Services
         {
             validateCompany(CompanyId);
             validateVideogame(videogameId);
-            return _mapper.Map< VideogameModel>(_libraryRepository.GetVideogame(videogameId));
+            var videogame = _libraryRepository.GetVideogame(videogameId);
+            /*if (videogame.companyId != CompanyId)
+            {
+                throw new NotFoundOperationException($"the videogame id:{videogameId} does not exists for company id:{CompanyId}");
+            }*/
+            return _mapper.Map< VideogameModel>(videogame);
         }
 
         public IEnumerable<VideogameModel> GetVidegames(int CompanyId)
@@ -51,12 +56,13 @@ namespace VideoGameAPI.Services
         {
             GetVidegame(companyId, videogameId);
             videogame.Id = videogameId;
-            return _mapper.Map<VideogameModel>(_libraryRepository.UpdateVideogame(_mapper.Map<VideoGameEntity>(videogame)));
+            _libraryRepository.UpdateVideogame(_mapper.Map<VideoGameEntity>(videogame));
+            return videogame;
         }
 
         private void validateCompany(int companyId)
         {
-            var company = _libraryRepository.GetCompany(companyId);
+            var company = new CompanyModel(); //_libraryRepository.GetCompany(companyId);
             if (company == null)
             {
                 throw new NotFoundOperationException($"the company id:{companyId}, does not exist");

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,29 +18,23 @@ namespace VideoGameAPI.Data.Repository
 
         private List<VideoGameEntity> videogames = new List<VideoGameEntity>
         {
-            new VideoGameEntity(){ Id = 1, Name = "Dark Souls", ESRB = "M", Genre = "Action RPG", Price = 44.9m, ReleaseDate = new DateTime(2008, 10,12), companyId = 1 },
-            new VideoGameEntity(){ Id = 2, Name = "Bloodborne", ESRB = "M", Genre = "Action RPG", Price = 54.9m, ReleaseDate = new DateTime(2014, 12,10), companyId = 1  },
-            new VideoGameEntity(){ Id = 3, Name = "Warcraft 3", ESRB = "T", Genre = "Strategy", Price = 15.9m, ReleaseDate = new DateTime(2001, 12,10), companyId = 2 },
-            new VideoGameEntity(){ Id = 4, Name = "starcraft remaster", ESRB = "T", Genre = "Strategy", Price = 10.9m, ReleaseDate = new DateTime(1993,12,10), companyId = 2 },
+            new VideoGameEntity(){ Id = 1, Name = "Dark Souls", ESRB = "M", Genre = "Action RPG", Price = 44.9m, ReleaseDate = new DateTime(2008, 10,12) },
+            new VideoGameEntity(){ Id = 2, Name = "Bloodborne", ESRB = "M", Genre = "Action RPG", Price = 54.9m, ReleaseDate = new DateTime(2014, 12,10) },
+            new VideoGameEntity(){ Id = 3, Name = "Warcraft 3", ESRB = "T", Genre = "Strategy", Price = 15.9m, ReleaseDate = new DateTime(2001, 12,10)},
+            new VideoGameEntity(){ Id = 4, Name = "starcraft remaster", ESRB = "T", Genre = "Strategy", Price = 10.9m, ReleaseDate = new DateTime(1993,12,10)},
         };
 
-        // companies
-        public CompanyEntity CreateCompany(CompanyEntity company)
+        private LibraryDbContext _dbContext;
+
+        public LibraryRepository(LibraryDbContext dbContext)
         {
-            int newId;
-            if (companies.Count == 0)
-            {
-                newId = 1;
-            }
-            else
-            {
-                newId = companies.OrderByDescending(c => c.Id).FirstOrDefault().Id + 1;
-            }
+            _dbContext = dbContext;
+        }
 
-            company.Id = newId;
-
-            companies.Add(company);
-            return company;
+        // companies
+        public void CreateCompany(CompanyEntity company)
+        {
+            _dbContext.Companies.Add(company);
         }
 
         public bool DeleteCompany(int companyId)
@@ -49,31 +44,54 @@ namespace VideoGameAPI.Data.Repository
             return true;
         }
 
-        public IEnumerable<CompanyEntity> GetCompanies(string orderBy)
+        public async Task<IEnumerable<CompanyEntity>> GetCompaniesAsync(string orderBy, bool showVideogames = false)
         {
+            IQueryable<CompanyEntity> query = _dbContext.Companies;
+            
             switch (orderBy)
             {
                 case "id":
-                    return companies.OrderBy(c => c.Id);
+                    query = query.OrderBy(c => c.Id);
+                    break;
                 case "name":
-                    return companies.OrderBy(c => c.Name);
+                    query = query.OrderBy(c => c.Name);
+                    break;
                 case "fundation-date":
-                    return companies.OrderBy(c => c.FundationDate);
+                    query = query.OrderBy(c => c.FundationDate);
+                    break;
                 case "country":
-                    return companies.OrderBy(c => c.Country);
+                    query = query.OrderBy(c => c.Country);
+                    break;
                 default:
-                    return companies.OrderBy(c => c.Id); ;
+                    query = query.OrderBy(c => c.Id); ;
+                    break;
             }
+            return await query.ToListAsync();
         }
 
-        public CompanyEntity GetCompany(int companyId)
+        public async Task<CompanyEntity> GetCompanyAsync(int companyId, bool showVideogames = false)
         {
-            return companies.FirstOrDefault(c => c.Id == companyId);
+            IQueryable<CompanyEntity> query = _dbContext.Companies;
+            query = query.AsNoTracking();
+
+            if (showVideogames)
+            {
+                query = query.Include(c => c.Videogames);
+            }
+
+            //tolist()
+            //toArray()
+            //foreach
+            //firstOfDefaul
+            //Single
+            //Count
+
+            return await query.FirstOrDefaultAsync(c => c.Id == companyId);
         }
 
         public bool UpdateCompany(CompanyEntity companyModel)
         {
-            var companyToUpdate = GetCompany(companyModel.Id);
+            var companyToUpdate = new CompanyEntity();//GetCompany(companyModel.Id);
             companyToUpdate.CEO = companyModel.CEO ?? companyToUpdate.CEO;
             companyToUpdate.Country = companyModel.Country ?? companyToUpdate.Country;
             companyToUpdate.FundationDate = companyModel.FundationDate ?? companyToUpdate.FundationDate;
@@ -106,7 +124,8 @@ namespace VideoGameAPI.Data.Repository
 
         public IEnumerable<VideoGameEntity> GetVideoGames(int companyId)
         {
-            return videogames.Where(v => v.companyId == companyId);
+            //return videogames.Where(v => v.companyId == companyId);
+            return null;
         }
 
         public bool UpdateVideogame(VideoGameEntity videoGame)
@@ -126,6 +145,13 @@ namespace VideoGameAPI.Data.Repository
             videogames.Remove(videogameToDelete);
             return true;
         }
-        
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            var res = await _dbContext.SaveChangesAsync();
+            return res > 0;
+        }
+
+       
     }
 }

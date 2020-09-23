@@ -9,9 +9,9 @@ namespace VideoGameAPI.Data.Repository
     public interface ILibraryRepository
     {
         //companies
-        IEnumerable<CompanyEntity> GetCompanies(string orderBy);
-        CompanyEntity GetCompany(int companyId);
-        CompanyEntity CreateCompany(CompanyEntity companyModel);
+        Task<IEnumerable<CompanyEntity>> GetCompaniesAsync(string orderBy, bool showVideogames = false);
+        Task<CompanyEntity> GetCompanyAsync(int companyId, bool showVideogames = false);
+        void CreateCompany(CompanyEntity companyModel);
         bool DeleteCompany(int companyId);
         bool UpdateCompany(CompanyEntity companyModel);
 
@@ -21,5 +21,8 @@ namespace VideoGameAPI.Data.Repository
         IEnumerable<VideoGameEntity> GetVideoGames(int companyId);
         bool UpdateVideogame(VideoGameEntity videoGame);
         bool DeleteVideogame(int videogameId);
+
+        //save changes
+        Task<bool> SaveChangesAsync();
     }
 }

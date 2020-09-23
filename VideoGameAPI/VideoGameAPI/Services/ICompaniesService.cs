@@ -8,9 +8,9 @@ namespace VideoGameAPI.Services
 {
     public interface ICompaniesService
     {
-        IEnumerable<CompanyModel> GetCompanies(string orderBy);
-        CompanyModel GetCompany(int companyId);
-        CompanyModel CreateCompany(CompanyModel companyModel);
+        Task<IEnumerable<CompanyModel>> GetCompaniesAsync(string orderBy, bool showVideogames);
+        Task<CompanyModel> GetCompanyAsync(int companyId, bool showVideogames);
+        Task<CompanyModel> CreateCompanyAsync(CompanyModel companyModel);
         DeleteModel DeleteCompany(int companyId);
         CompanyModel UpdateCompany(int companyId, CompanyModel companyModel);
     }

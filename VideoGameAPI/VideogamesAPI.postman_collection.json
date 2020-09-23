@@ -11,13 +11,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{hostAPI}}/api/companies",
+					"raw": "{{hostAPI}}/api/companies/12/1/videogames",
 					"host": [
 						"{{hostAPI}}"
 					],
 					"path": [
 						"api",
-						"companies"
+						"companies",
+						"12",
+						"1",
+						"videogames"
 					]
 				}
 			},
@@ -29,7 +32,21 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "{{hostAPI}}/api/companies/1?showVideogames=false",
+					"host": [
+						"{{hostAPI}}"
+					],
+					"path": [
+						"api",
+						"companies",
+						"1"
+					],
+					"query": [
+						{
+							"key": "showVideogames",
+							"value": "false"
+						}
+					]
 				}
 			},
 			"response": []
@@ -49,14 +66,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{hostAPI}}/api/companies/",
+					"raw": "{{hostAPI}}/api/companies",
 					"host": [
 						"{{hostAPI}}"
 					],
 					"path": [
 						"api",
-						"companies",
-						""
+						"companies"
 					]
 				}
 			},
@@ -105,6 +121,108 @@
 						"companies",
 						"1"
 					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetVideogame",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{hostAPI}}/api/companies/2/videogames/3",
+					"host": [
+						"{{hostAPI}}"
+					],
+					"path": [
+						"api",
+						"companies",
+						"2",
+						"videogames",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateVideogame",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Diablo 3\",\r\n    \"esrb\": \"T\",\r\n    \"genre\": \"RPG\",\r\n    \"releaseDate\": \"2001-12-10T00:00:00\",\r\n    \"price\": 15.9,\r\n    \"companyId\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{hostAPI}}/api/companies/2/videogames",
+					"host": [
+						"{{hostAPI}}"
+					],
+					"path": [
+						"api",
+						"companies",
+						"2",
+						"videogames"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetVideogames",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{hostAPI}}/api/companies/2/videogames",
+					"host": [
+						"{{hostAPI}}"
+					],
+					"path": [
+						"api",
+						"companies",
+						"2",
+						"videogames"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteVideogame",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{hostAPI}}/api/companies/2/videogames/3",
+					"host": [
+						"{{hostAPI}}"
+					],
+					"path": [
+						"api",
+						"companies",
+						"2",
+						"videogames",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateVideogame",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
 				}
 			},
 			"response": []

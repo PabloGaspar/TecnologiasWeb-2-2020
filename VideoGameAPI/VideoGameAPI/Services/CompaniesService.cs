@@ -29,17 +29,23 @@ namespace VideoGameAPI.Services
             _mapper = mapper;
         }
 
-        public CompanyModel CreateCompany(CompanyModel companyModel)
+        public async Task<CompanyModel> CreateCompanyAsync(CompanyModel companyModel)
         {
-
             var companyEntity = _mapper.Map<CompanyEntity>(companyModel);
-            var returnetCompany = _libraryRepository.CreateCompany(companyEntity);
-            return _mapper.Map<CompanyModel>(returnetCompany);
+            _libraryRepository.CreateCompany(companyEntity);
+            var result = await _libraryRepository.SaveChangesAsync();
+
+            if (result)
+            {
+                return _mapper.Map<CompanyModel>(companyEntity);
+            }
+
+            throw new Exception("Database Error");
         }
 
         public DeleteModel DeleteCompany(int companyId)
         {
-            var companyToDelete = GetCompany(companyId);
+            var companyToDelete = new CompanyModel();//GetCompany(companyId);
 
             var result = _libraryRepository.DeleteCompany(companyId);
 
@@ -58,24 +64,23 @@ namespace VideoGameAPI.Services
                     Message = "The company was not deleted."
                 };
             }
-           
         }
 
-        public IEnumerable<CompanyModel> GetCompanies(string orderBy)
+        public async Task<IEnumerable<CompanyModel>> GetCompaniesAsync(string orderBy, bool showVideogames)
         {
             if (!allowedOrderByParameters.Contains(orderBy.ToLower()))
             {
                 throw new BadRequestOperationException($"the field: {orderBy} is not supported, please use one of these {string.Join(",", allowedOrderByParameters)}");
             }
 
-            var entityList = _libraryRepository.GetCompanies(orderBy);
+            var entityList = await _libraryRepository.GetCompaniesAsync(orderBy, showVideogames);
             var modelList = _mapper.Map<IEnumerable<CompanyModel>>(entityList);
             return modelList;
         }
 
-        public CompanyModel GetCompany(int companyID)
+        public async Task<CompanyModel> GetCompanyAsync(int companyID, bool showVideogames = false)
         {
-            var company = _libraryRepository.GetCompany(companyID);
+            var company = await _libraryRepository.GetCompanyAsync(companyID, showVideogames);
             if (company == null)
             {
                 throw new NotFoundOperationException($"The company with id:{companyID} does not exists");

@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using VideoGameAPI.Data.Repository;
 using VideoGameAPI.Services;
 using AutoMapper;
+using VideoGameAPI.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace VideoGameAPI
 {
@@ -31,7 +33,13 @@ namespace VideoGameAPI
 
             services.AddTransient<ICompaniesService, CompaniesService>();
             services.AddTransient<IVidegamesService, VidegamesService>();
-            services.AddSingleton<ILibraryRepository, LibraryRepository>();
+            services.AddTransient<ILibraryRepository, LibraryRepository>();
+
+            //entity framework configuration
+            services.AddDbContext<LibraryDbContext>(options => {
+                options.UseSqlServer(Configuration.GetConnectionString("VideogamesConnection"));
+            });
+
 
             //automapper configuration
             services.AddAutoMapper(typeof(Startup));
