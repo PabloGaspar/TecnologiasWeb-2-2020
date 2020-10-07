@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,9 @@ namespace VideoGameAPI.Controllers
         }
 
         //api/companies
+        [Authorize]
         [HttpGet]
-        public async  Task<ActionResult<IEnumerable<CompanyModel>>> GetCompaniesAsync(string orderBy = "Id", bool showVideogames = false) 
+        public async Task<ActionResult<IEnumerable<CompanyModel>>> GetCompaniesAsync(string orderBy = "Id", bool showVideogames = false) 
         {
             try
             {
@@ -78,11 +80,11 @@ namespace VideoGameAPI.Controllers
         }
 
         [HttpDelete("{companyId:int}")]
-        public ActionResult<DeleteModel> Deletecompany(int companyId)
+        public async Task<ActionResult<DeleteModel>> DeletecompanyAsync(int companyId)
         {
             try
             {
-                return Ok(_companyService.DeleteCompany(companyId));
+                return Ok(await _companyService.DeleteCompanyAsync(companyId));
             }
             catch (NotFoundOperationException ex)
             {
@@ -95,7 +97,7 @@ namespace VideoGameAPI.Controllers
         }
 
         [HttpPut("{companyId:int}")]
-        public IActionResult UpdateCompany(int companyId, [FromBody] CompanyModel companyModel)
+        public async Task<IActionResult> UpdateCompanyAsync(int companyId, [FromBody] CompanyModel companyModel)
         {
             try
             {
@@ -110,7 +112,7 @@ namespace VideoGameAPI.Controllers
                     }
                 }
 
-                return Ok(_companyService.UpdateCompany(companyId, companyModel));
+                return Ok(await _companyService.UpdateCompanyAsync(companyId, companyModel));
             }
             catch (NotFoundOperationException ex)
             {

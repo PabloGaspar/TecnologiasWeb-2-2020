@@ -11,8 +11,8 @@ namespace VideoGameAPI.Services
         Task<IEnumerable<CompanyModel>> GetCompaniesAsync(string orderBy, bool showVideogames);
         Task<CompanyModel> GetCompanyAsync(int companyId, bool showVideogames);
         Task<CompanyModel> CreateCompanyAsync(CompanyModel companyModel);
-        DeleteModel DeleteCompany(int companyId);
-        CompanyModel UpdateCompany(int companyId, CompanyModel companyModel);
+        Task<DeleteModel> DeleteCompanyAsync(int companyId);
+        Task<CompanyModel> UpdateCompanyAsync(int companyId, CompanyModel companyModel);
     }
 }
 

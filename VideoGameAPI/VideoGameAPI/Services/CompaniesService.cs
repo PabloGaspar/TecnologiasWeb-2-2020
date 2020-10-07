@@ -43,24 +43,32 @@ namespace VideoGameAPI.Services
             throw new Exception("Database Error");
         }
 
-        public DeleteModel DeleteCompany(int companyId)
+        public async Task<DeleteModel> DeleteCompanyAsync(int companyId)
         {
-            var companyToDelete = new CompanyModel();//GetCompany(companyId);
+            await GetCompanyAsync(companyId);
 
-            var result = _libraryRepository.DeleteCompany(companyId);
+            var DeleteResult = await _libraryRepository.DeleteCompanyAsync(companyId);
 
-            if (result)
+            var saveResult = await _libraryRepository.SaveChangesAsync();
+
+            if (!saveResult||!DeleteResult)
+            {
+                throw new Exception("Database Error");
+            }
+
+
+            if (saveResult)
             {
                 return new DeleteModel()
                 {
-                    IsSuccess = result,
+                    IsSuccess = saveResult,
                     Message = "The company was deleted."
                 };
             } else
             {
                 return new DeleteModel()
                 {
-                    IsSuccess = result,
+                    IsSuccess = saveResult,
                     Message = "The company was not deleted."
                 };
             }
@@ -89,10 +97,19 @@ namespace VideoGameAPI.Services
             return _mapper.Map<CompanyModel>(company);
         }
 
-        public CompanyModel UpdateCompany(int companyId, CompanyModel companyModel)
+        public async Task<CompanyModel> UpdateCompanyAsync(int companyId, CompanyModel companyModel)
         {
             var companyEntity = _mapper.Map<CompanyEntity>(companyModel);
+            await GetCompanyAsync(companyId);
+            companyEntity.Id = companyId;
             _libraryRepository.UpdateCompany(companyEntity);
+            
+            var saveResult = await _libraryRepository.SaveChangesAsync();
+
+            if (!saveResult)
+            {
+                throw new Exception("Database Error");
+            }
             return companyModel;
         }
     }

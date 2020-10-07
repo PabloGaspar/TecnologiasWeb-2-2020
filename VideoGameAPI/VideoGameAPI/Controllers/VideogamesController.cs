@@ -22,11 +22,11 @@ namespace VideoGameAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<VideogameModel>> GetVideogames(int companyId)
+        public async Task<ActionResult<IEnumerable<VideogameModel>>> GetVideogames(int companyId)
         {
             try
             {
-                return  Ok(_videogameService.GetVidegames(companyId));
+                return  Ok(await _videogameService.GetVidegamesAsync(companyId));
             }
             catch(NotFoundOperationException ex)
             {
@@ -39,11 +39,11 @@ namespace VideoGameAPI.Controllers
         }
 
         [HttpGet("{videogameId:int}",  Name="GetVideogame")]
-        public ActionResult<VideogameModel> GetVideogame(int companyId, int videogameId)
+        public async Task<ActionResult<VideogameModel>> GetVideogameAsync(int companyId, int videogameId)
         {
             try
             {
-                return Ok(_videogameService.GetVidegame(companyId, videogameId));
+                return Ok(await _videogameService.GetVidegameAsync(companyId, videogameId));
             }
             catch (NotFoundOperationException ex)
             {
@@ -56,11 +56,11 @@ namespace VideoGameAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<VideogameModel> CreateVideogame(int companyId, [FromBody] VideogameModel videogame)
+        public async Task<ActionResult<VideogameModel>> CreateVideogameAsync(int companyId, [FromBody] VideogameModel videogame)
         {
             try
             {
-                var videogameCreated = _videogameService.CreateVideogame(companyId, videogame);
+                var videogameCreated = await _videogameService.CreateVideogameAsync(companyId, videogame);
                 return CreatedAtRoute("GetVideogame",  new { companyId = companyId , videogameId = videogameCreated.Id}, videogameCreated);
             }
             catch (NotFoundOperationException ex)
@@ -74,11 +74,11 @@ namespace VideoGameAPI.Controllers
         }
 
         [HttpPut("{videogameId:int}")]
-        public ActionResult<VideogameModel> UpdateVideogame(int companyId, int videogameId, [FromBody] VideogameModel videogame)
+        public async Task<ActionResult<VideogameModel>> UpdateVideogameAsync(int companyId, int videogameId, [FromBody] VideogameModel videogame)
         {
             try
             {
-                return Ok(_videogameService.UpdateVideogame(companyId, videogameId, videogame));
+                return Ok(await _videogameService.UpdateVideogameAsync(companyId, videogameId, videogame));
             }
             catch (NotFoundOperationException ex)
             {
@@ -91,11 +91,11 @@ namespace VideoGameAPI.Controllers
         }
 
         [HttpDelete("{videogameId:int}")]
-        public ActionResult<bool> DeleteVideogame(int companyId, int videogameId)
+        public async Task<ActionResult<bool>> DeleteVideogameAsync(int companyId, int videogameId)
         {
             try
             {
-                return Ok(_videogameService.DeleteVideogame(companyId, videogameId));
+                return Ok(await _videogameService.DeleteVideogameAsync(companyId, videogameId));
             }
             catch (NotFoundOperationException ex)
             {

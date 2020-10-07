@@ -13,6 +13,6 @@ namespace VideoGameAPI.Models
         public string Genre { get; set; }
         public DateTime? ReleaseDate { get; set; }
         public decimal? Price { get; set; }
-        public int companyId { get; set; }
+        public int CompanyId { get; set; }
     }
 }

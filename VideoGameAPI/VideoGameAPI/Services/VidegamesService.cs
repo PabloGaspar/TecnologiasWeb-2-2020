@@ -21,57 +21,78 @@ namespace VideoGameAPI.Services
             _libraryRepository = libraryRepository;
         }
 
-        public VideogameModel CreateVideogame(int CompanyId, VideogameModel videogame)
+        public async Task<VideogameModel> CreateVideogameAsync(int CompanyId, VideogameModel videogame)
         {
-            validateCompany(CompanyId);
-            return _mapper.Map< VideogameModel>(_libraryRepository.CreateVideogame(_mapper.Map<VideoGameEntity>(videogame)));
+            await validateCompany(CompanyId);
+            var vidogameEntity = _mapper.Map<VideoGameEntity>(videogame);
+            _libraryRepository.CreateVideogame(vidogameEntity);
+            var saveResult = await _libraryRepository.SaveChangesAsync();
+            if (!saveResult)
+            {
+                throw new Exception("save error");
+            }
+
+            var modelToReturn = _mapper.Map< VideogameModel>(vidogameEntity);
+            modelToReturn.CompanyId = CompanyId;
+            return modelToReturn;
         }
 
-        public bool DeleteVideogame(int CompanyId, int videogameId)
+        public async Task<bool> DeleteVideogameAsync(int CompanyId, int videogameId)
         {
-            GetVidegame(CompanyId, videogameId);
-            return _libraryRepository.DeleteVideogame(videogameId);
+            await GetVidegameAsync(CompanyId, videogameId);
+            _libraryRepository.DeleteVideogame(videogameId);
+            var saveRestul = await _libraryRepository.SaveChangesAsync();
+            if (!saveRestul)
+            {
+                throw new Exception("Error while saving.");
+            }
+            return true;
         }
 
-        public VideogameModel GetVidegame(int CompanyId, int videogameId)
+        public async Task<VideogameModel> GetVidegameAsync(int CompanyId, int videogameId)
         {
-            validateCompany(CompanyId);
-            validateVideogame(videogameId);
-            var videogame = _libraryRepository.GetVideogame(videogameId);
-            /*if (videogame.companyId != CompanyId)
+            await validateCompany(CompanyId);
+            await validateVideogame(videogameId);
+            var videogame = await _libraryRepository.GetVideogameAsync(videogameId);
+            if (videogame.Company.Id != CompanyId)
             {
                 throw new NotFoundOperationException($"the videogame id:{videogameId} does not exists for company id:{CompanyId}");
-            }*/
-            return _mapper.Map< VideogameModel>(videogame);
+            }
+            return _mapper.Map<VideogameModel>(videogame);
         }
 
-        public IEnumerable<VideogameModel> GetVidegames(int CompanyId)
+        public async Task<IEnumerable<VideogameModel>> GetVidegamesAsync(int CompanyId)
         {
-            validateCompany(CompanyId);
-            return _mapper.Map<IEnumerable<VideogameModel>>(_libraryRepository.GetVideoGames(CompanyId));
-
+            await validateCompany(CompanyId);
+            var videogames = await _libraryRepository.GetVideoGamesAsync(CompanyId);
+            return _mapper.Map<IEnumerable<VideogameModel>>(videogames);
         }
 
-        public VideogameModel UpdateVideogame(int companyId, int videogameId, VideogameModel videogame)
+        public async Task<bool> UpdateVideogameAsync(int companyId, int videogameId, VideogameModel videogame)
         {
-            GetVidegame(companyId, videogameId);
+            await GetVidegameAsync(companyId, videogameId);
             videogame.Id = videogameId;
-            _libraryRepository.UpdateVideogame(_mapper.Map<VideoGameEntity>(videogame));
-            return videogame;
+            await _libraryRepository.UpdateVideogameAsync(_mapper.Map<VideoGameEntity>(videogame));
+            var saveRestul = await _libraryRepository.SaveChangesAsync();
+            if (!saveRestul)
+            {
+                throw new Exception("Error while saving.");
+            }
+            return true;
         }
 
-        private void validateCompany(int companyId)
+        private async Task validateCompany(int companyId)
         {
-            var company = new CompanyModel(); //_libraryRepository.GetCompany(companyId);
+            var company = await _libraryRepository.GetCompanyAsync(companyId); //_libraryRepository.GetCompany(companyId);
             if (company == null)
             {
                 throw new NotFoundOperationException($"the company id:{companyId}, does not exist");
             }
         }
 
-        private void validateVideogame(int videogameId)
+        private async Task validateVideogame(int videogameId)
         {
-            var videogame = _libraryRepository.GetVideogame(videogameId);
+            var videogame = await _libraryRepository.GetVideogameAsync(videogameId);
             if (videogame == null)
             {
                 throw new NotFoundOperationException($"the videogame id:{videogameId}, does not exist");

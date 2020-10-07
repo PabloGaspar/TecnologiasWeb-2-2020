@@ -17,7 +17,9 @@ namespace VideoGameAPI.Data
 
 
             this.CreateMap<VideogameModel, VideoGameEntity>()
-                .ReverseMap();
+                .ForMember(des => des.Company, opt => opt.MapFrom(scr => new CompanyEntity { Id = scr.CompanyId }))  
+                .ReverseMap()
+                .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(scr => scr.Company.Id));
             //this.CreateMap<Camp, CampModel>()
             //  .ForMember(c => c.Venue, o => o.MapFrom(m => m.Location.VenueName))
             //  .ReverseMap();

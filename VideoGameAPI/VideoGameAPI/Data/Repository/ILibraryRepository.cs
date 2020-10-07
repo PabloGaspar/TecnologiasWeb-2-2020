@@ -12,14 +12,14 @@ namespace VideoGameAPI.Data.Repository
         Task<IEnumerable<CompanyEntity>> GetCompaniesAsync(string orderBy, bool showVideogames = false);
         Task<CompanyEntity> GetCompanyAsync(int companyId, bool showVideogames = false);
         void CreateCompany(CompanyEntity companyModel);
-        bool DeleteCompany(int companyId);
+        Task<bool> DeleteCompanyAsync(int companyId);
         bool UpdateCompany(CompanyEntity companyModel);
 
         //videogames 
-        VideoGameEntity CreateVideogame(VideoGameEntity videoGame);
-        VideoGameEntity GetVideogame(int videogameId);
-        IEnumerable<VideoGameEntity> GetVideoGames(int companyId);
-        bool UpdateVideogame(VideoGameEntity videoGame);
+        void CreateVideogame(VideoGameEntity videoGame);
+        Task<VideoGameEntity> GetVideogameAsync(int videogameId);
+        Task<IEnumerable<VideoGameEntity>> GetVideoGamesAsync(int companyId);
+        Task<bool> UpdateVideogameAsync(VideoGameEntity videoGame);
         bool DeleteVideogame(int videogameId);
 
         //save changes
