@@ -23,7 +23,7 @@ namespace VideoGameAPI.Controllers
         }
 
         //api/companies
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CompanyModel>>> GetCompaniesAsync(string orderBy = "Id", bool showVideogames = false) 
         {
