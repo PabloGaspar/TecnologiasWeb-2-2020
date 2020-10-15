@@ -16,6 +16,39 @@
         <label for="message-id">Message</label>
         <br>
         <textarea name="message" id="message-id" cols="30" rows="10" maxlength="20"></textarea>
+        <br>
+        <p>State</p>
+        <input type="radio" name="state-name" id="state-cochabamba" value="Cochabamba" checked>
+        <label for="state-cochabamba">Cochabamba</label> 
+        <input type="radio" name="state-name" id="state-la-paz" value="La Paz"> 
+        <label for="state-la-paz">La Paz</label> 
+        <input type="radio" name="state-name" id="state-santa-cruz" value="Santa Cruz">
+        <label for="state-santa-cruz">Santa Cruz</label> 
+        <br>
+        <div id="food-section">
+            <p>What Food do you like</p>
+            <input type="checkbox" name="food" id="pizza-food" value="Pizza" checked>
+            <label for="pizza-food">Pizza</label> 
+            <input type="checkbox" name="food" id="Pique-food" value="Pique">
+            <label for="Pique-food">Pique</label> 
+            <input type="checkbox" name="food" id="wings-food" value="Wings">
+            <label for="wings-food">Wings</label>
+        </div>
+       <br>
+        <label for="score-id">Score</label>
+        <input name="Score" type="range" min="10" max="100" value="40" id="score-id">
+
+        <br>
+        <label for="videogame-type-id">Choose your favorite videogame</label>
+        <select name="videogame-type" id="videogame-type-id">
+            <option value="Smash Bross">Smash bross Game</option>
+            <option value="Mario Kart">Mario Kart Game</option>
+            <option value="Zelda" selected>Zelda Game</option>
+        </select>
+        <br>
+        <input type="submit" value="SUBMIT">
+
     </form>
+
 </body>
 </html>
