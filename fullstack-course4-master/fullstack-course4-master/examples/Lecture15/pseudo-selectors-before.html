@@ -5,7 +5,45 @@
 <title>Pseudo Class Selectors</title>
 <style>
 /* Styles go here. */
+header li {
+  list-style: none;
+}
 
+a:link, a:visited{
+  text-decoration: none;
+  background-color: green;
+  border: 2px dashed rgb(170, 40, 0);
+  color: purple;
+  display:block;
+  width: 200px;
+  text-align: center;
+  margin-bottom: 1px;
+}
+
+a:hover, a:active{
+  background-color: royalblue;
+  color:yellow;
+}
+
+input[type=text] {
+  background-color: skyblue;
+}
+
+input[type=text]:focus {
+  background-color: yellow;
+}
+
+header li:nth-child(3){
+  font-size: 24px;
+}
+
+section div:nth-child(odd){
+  background-color: gray;
+}
+
+section div:nth-child(4):hover{
+  background-color: rgb(36, 97, 134);
+}
 
 </style>
 </head>
@@ -19,6 +57,11 @@
     <li><a href="http://www.facebook.com/CourseraWebDev" target="_blank">Facebook Fan Page</a></li>
   </ul>
 </header>
+
+<form>
+  First name: <input type="text" name="firstname"><br>
+  Last name: <input type="text" name="lastname">
+</form>
 
 <section>
   <div>DIV 1</div>
