@@ -5,14 +5,13 @@ function makeMultiplier (multiplier) {
     console.log("Multiplier is: " + multiplier);
   }
   b();
+  
 
+  var multiply = function (x) {
+    return multiplier * x;
+  }
 
-  return (
-      function (x) {
-        return multiplier * x;
-      }
-
-    );
+  return multiply;
 }
 
 var doubleAll = makeMultiplier(2);

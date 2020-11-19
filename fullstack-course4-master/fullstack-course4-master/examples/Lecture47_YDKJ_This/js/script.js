@@ -1,4 +1,3 @@
-//Call-site
 
 var name = "global";
 /*
@@ -34,16 +33,18 @@ baz(); // <-- call-site for `baz`
 
 
 //Nothing But Rules
-
+//Call-site
 //Default Binding--------------------------------------------------------------------------------------------------
-
+//this -> global scope
 function foo() {
 	console.log( this.a );
 }
 
 var a = 2;
-
+debugger;
 foo(); 
+
+
 //window.foo();
 
 var obj = {
@@ -58,15 +59,24 @@ fooRef();
 
 
 //Implicit Binding--------------------------------------------------------------------------------------------------------------
+
+
+
+debugger;
+
+
 function foo() {
 	console.log( this.a );
 }
 
 var obj = {
-	a: 2,
-	foo: foo
+	a : 17,
+	foo: foo, 
+	name: "pepito"
 };
 
+
+var a = 33;
 obj.foo(); 
 
 
@@ -145,15 +155,15 @@ setTimeout( obj.foo, 100 ); // "oops, global"
 
 
 //Explicit Binding-------------------------------------------------------------------------------------------------------------
-function foo() {
-	console.log( this.a );
+function foo(prefix, sufix) {
+	console.log( `${prefix} - ${this.a} - ${sufix}`);
 }
-
+var a = "in global";
 var obj = {
 	a: 2
 };
 
-foo.call( obj ); 
+foo.call( obj, "Sir", "good bye"); 
 
 
 ///////
@@ -187,7 +197,9 @@ var obj = {
 	a: 2
 };
 
-var bar = function() {
+var result = foo.call(obj);
+
+var bar = function(arguments) {
 	return foo.apply( obj, arguments );
 };
 
@@ -234,11 +246,37 @@ var b = bar( 3 );
 console.log( b ); 
 /////
 
-//new Binding------------------------------------------------------------------------------------------
 
-function foo(a) {
-	this.a = a;
+function foo() {
+	console.log( `Foo returns ${this.name}` );
 }
 
-var bar = new foo( 2 );
-console.log( bar.a ); 
+var name = "name in global";
+
+var obj = {
+	name : "obj name"
+};
+
+var obj2 = {
+	name : "obj22222 name"
+};
+
+var baz = foo.bind(obj);
+baz.call(obj2);
+
+
+//new Binding------------------------------------------------------------------------------------------
+
+function Person(nameArg, ageArg) {
+	this.name = nameArg;
+	this.age = ageArg;
+}
+
+var pepito = new Person( "pepito", 22);
+console.log( `person name is ${pepito.name} and he is ${pepito.age}`);
+
+var maria = new Person( "maria", 20);
+console.log( `person name is ${maria.name} and he is ${maria.age}`);
+
+
+

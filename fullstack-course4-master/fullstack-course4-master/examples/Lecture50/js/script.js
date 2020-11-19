@@ -6,6 +6,8 @@ array[2] = function (name) {
   console.log("Hello " + name);
 };
 array[3] = {course: " HTML, CSS & JS"};
+array.push("other");
+
 
 console.log(array);
 array[2](array[0]);
@@ -16,7 +18,7 @@ console.log(array[3].course);
 var names = ["Yaakov", "John", "Joe"];
 console.log(names);
 
-for (var i = 0; i < names.length; i++) {
+for (let i = 0; i < names.length; i++) {
   console.log("Hello " + names[i]);
 }
 
@@ -40,6 +42,7 @@ for (var name in names2) {
   console.log("Hello " + names2[name]);
 }
 
+var names2 = ["Yaakov", "John", "Joe"];
 names2.greeting = "Hi!";
 
 for (var name in names2) {
@@ -47,7 +50,10 @@ for (var name in names2) {
 }
 
 
-
+debugger;
+for (var name of names2) {
+  console.log("Hello " + name);
+}
 
 
 

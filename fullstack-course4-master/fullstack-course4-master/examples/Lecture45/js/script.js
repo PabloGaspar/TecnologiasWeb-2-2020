@@ -1,5 +1,19 @@
 // Object creation
+
 var company = new Object();
+company.name = "Facebook";
+company.color = "Blue";
+company.ceo = new Object();
+company.ceo.firstName = "Mark";
+company.ceo.lastNAme = "Sukerberg";
+
+console.log(company);
+
+console.log("Company CEO name is: " 
+  + company.ceo.firstName);
+
+
+  var company = new Object();
 company.name = "Facebook";
 company.ceo = new Object();
 company.ceo.firstName = "Mark";

@@ -1,11 +1,14 @@
 // DOM manipulation
 // console.log(document.getElementById("title"));
 // console.log(document instanceof HTMLDocument);
+// var p = document.querySelector(".divClass p");
+//var ps = document.querySelectorAll(".divClass p");
 
-function sayHello () {
-  var name =
-   document.getElementById("name").value;
-   var message = "<h2>Hello " + name + "!</h2>";
+
+function sayHello (eventName, otherValue) {
+  debugger;
+  var name = document.getElementById("name").value;
+  var message = `<h1>Hello ${name}</h1>`;
 
   // document
   //   .getElementById("content")
@@ -15,6 +18,7 @@ function sayHello () {
     .getElementById("content")
     .innerHTML = message;
 
+    
   if (name === "student") {
     var title = 
       document

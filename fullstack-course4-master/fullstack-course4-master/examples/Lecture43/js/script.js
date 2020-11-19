@@ -4,6 +4,14 @@ var string = "Hello";
 string = string + " World";
 console.log(string + "!");
 
+// string template ES6
+var name = "pepito";
+var age = 22;
+
+var greet =  `Hi my name is ${name} and I am ${age} and 2+2=${2 + 2}`
+
+console.log(greet);
+
 
 
 
@@ -61,6 +69,32 @@ if (true && "hello" && 1 && -1 && "false") {
   console.log("All true");
 }
 
+
+//ES6 Variable declaration
+ //let use
+
+ let letVariable = "im am let"; 
+
+ letVariable = "other let";
+ const constVariable = "const variable";
+
+ console.log(`the value of letVariable is :${letVariable}`);
+
+if(true){
+  let ifVariable = "inside if";
+}
+console.log(ifVariable);
+
+for( let i = 0; i < 10; i++){
+    
+}
+
+//console.log(`the value of i is :${i}`);
+
+
+function sayHi (){
+  var x = 12;
+}
 
 
 

@@ -5,6 +5,7 @@ function Circle (radius) {
 
 Circle.prototype.getArea = 
   function () {
+    console.log(`radio: ${this.radius}`)
     return Math.PI * Math.pow(this.radius, 2);
   };
 
@@ -13,7 +14,7 @@ var myCircle = new Circle(10);
 console.log(myCircle.getArea());
 
 var myOtherCircle = new Circle(20);
-console.log(myOtherCircle);
+console.log(myOtherCircle.getArea());
 
 
 

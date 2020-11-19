@@ -48,6 +48,8 @@ function bar(fn) {
 
 function wait(message) {
 
+	var callback = 
+	
 	setTimeout( function timer(){
 		console.log( message );
 	}, 1000 );
