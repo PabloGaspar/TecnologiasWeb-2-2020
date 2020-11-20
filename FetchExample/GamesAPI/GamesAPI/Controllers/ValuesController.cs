@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamesAPI.Controllers
@@ -14,7 +15,8 @@ namespace GamesAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Person>> Get()
         {
-            return new Person[] { new Person() {Age=22, Name = "Pedro" }, new Person() { Age = 33, Name = "Ana"} };
+            var people =  new Person[] { new Person() {Age=22, Name = "Pedro" }, new Person() { Age = 33, Name = "Ana"} };
+            return Ok(people);
         }
 
         // GET api/values/5
@@ -28,7 +30,15 @@ namespace GamesAPI.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] Person value)
         {
-            return Created("new", value);
+            try
+            {
+                //return Created("new", value);
+                throw new Exception("from backend");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Something happend: {ex.Message}");
+            }
         }
 
         // PUT api/values/5
