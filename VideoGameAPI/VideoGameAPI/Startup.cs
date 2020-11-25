@@ -75,6 +75,11 @@ namespace VideoGameAPI
 
             //automapper configuration
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => { options.AllowAnyOrigin(); options.AllowAnyMethod(); options.AllowAnyHeader(); });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,6 +92,8 @@ namespace VideoGameAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(options => { options.AllowAnyOrigin(); options.AllowAnyMethod(); options.AllowAnyHeader(); });
 
             app.UseRouting();
 

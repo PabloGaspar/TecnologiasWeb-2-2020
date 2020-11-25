@@ -11,6 +11,7 @@ using VideoGameAPI.Services;
 
 namespace VideoGameAPI.Controllers
 {
+    [Authorize()]
     [Route("api/[controller]")]
     public class CompaniesController : ControllerBase
     {
@@ -23,7 +24,6 @@ namespace VideoGameAPI.Controllers
         }
 
         //api/companies
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CompanyModel>>> GetCompaniesAsync(string orderBy = "Id", bool showVideogames = false) 
         {
